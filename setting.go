@@ -96,6 +96,17 @@ func EnableInsecureTLS(enable bool) {
 	std.EnableInsecureTLS(enable)
 }
 
+func (r *Req) EnableRenegotiation(enable bool) {
+	trans := r.getTransport()
+	if trans == nil {
+		return
+	}
+	if trans.TLSClientConfig == nil {
+		trans.TLSClientConfig = &tls.Config{}
+	}
+	trans.TLSClientConfig.Renegotiation = tls.RenegotiateOnceAsClient
+}
+
 // EnableCookieenable or disable cookie manager
 func (r *Req) EnableCookie(enable bool) {
 	if enable {
